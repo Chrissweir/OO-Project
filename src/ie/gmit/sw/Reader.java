@@ -18,24 +18,24 @@ public class Reader {
 
 	public Reader() {
 	}
-	
+
 	/**
 	 * Retrieves the jar from the specified jar
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
 	public void readJarFile(String jarFile) throws FileNotFoundException, IOException{
-			JarInputStream in = new JarInputStream(new FileInputStream(new File(jarFile)));
-			JarEntry next = in.getNextJarEntry();
-			while (next != null) {
-				if (next.getName().endsWith(".class")) {
-					String name = next.getName().replaceAll("/", "\\.");
-					name = name.replaceAll(".class", "");
-					if (!name.contains("$")) name.substring(0, name.length() - ".class".length());
-					System.out.println(name);
-				}
-				next = in.getNextJarEntry();
+		JarInputStream in = new JarInputStream(new FileInputStream(new File(jarFile)));
+		JarEntry next = in.getNextJarEntry();
+		while (next != null) {
+			if (next.getName().endsWith(".class")) {
+				String name = next.getName().replaceAll("/", "\\.");
+				name = name.replaceAll(".class", "");
+				if (!name.contains("$")) name.substring(0, name.length() - ".class".length());
+				System.out.println(name);
 			}
-			in.close();
+			next = in.getNextJarEntry();
+		}
+		in.close();
 	}
 }
