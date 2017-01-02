@@ -1,5 +1,12 @@
 package ie.gmit.sw;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+
 /**
  * 
  * @author Christopher Weir - G00309429
@@ -9,9 +16,25 @@ package ie.gmit.sw;
 
 public class Reader {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public Reader() {}
+	
+	/**
+	 * Retrieves the jar from the specified jar
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void readJarFile(String jar) throws FileNotFoundException, IOException{
+		JarInputStream in = new JarInputStream(new FileInputStream(new File(jar)));
+		JarEntry next = in.getNextJarEntry();
+		while (next != null) {
+			if (next.getName().endsWith(".class")) {
+				String name = next.getName().replaceAll("/", "\\.");
+				name = name.replaceAll(".class", "");
+				if (!name.contains("$")) name.substring(0, name.length() - ".class".length());
+				System.out.println(name);
+			}
+			next = in.getNextJarEntry();
+		}
+		in.close();
 	}
-
 }
