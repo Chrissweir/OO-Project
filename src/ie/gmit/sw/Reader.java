@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import com.sun.javafx.collections.MappingChange.Map;
+
 /**
  * 
  * @author Christopher Weir - G00309429
@@ -15,9 +17,8 @@ import java.util.jar.JarInputStream;
  */
 
 public class Reader {
-
-	public Reader() {
-	}
+	
+	public Reader() {}
 
 	/**
 	 * Retrieves the jar from the specified jar
