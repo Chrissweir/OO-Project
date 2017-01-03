@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 /**
  * 
@@ -30,6 +31,12 @@ public class Reader {
 	 */
 	public void readJarFile(String jarFile) throws FileNotFoundException, IOException{
 
+		File file  = new File(jarFile);
+        URL url = file.toURI().toURL();
+        URL[] urls = new URL[]{url};
+
+        ClassLoader cl = new URLClassLoader(urls);
+		
 		JarInputStream in = new JarInputStream(new FileInputStream(new File(jarFile)));
 		JarEntry next = in.getNextJarEntry();
 
@@ -42,13 +49,14 @@ public class Reader {
 
 				Class queryClass;
 				try {
-					queryClass = Class.forName(name);
+					queryClass = Class.forName(name, false, cl);
 					cls.add(queryClass);
 					new Reflection(queryClass);
+					System.exit(0);
 				} 
 				catch (ClassNotFoundException e) {
 					System.out.println("Couldn't find class '" + name + "'");
-					System.exit(1);
+					System.exit(0);
 				} 
 			}
 			next = in.getNextJarEntry();
