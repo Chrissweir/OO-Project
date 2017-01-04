@@ -18,11 +18,11 @@ import java.util.jar.JarInputStream;
  *
  */
 
-public class Reader {
+public class JarReader {
 
 	List<Class> cls = new ArrayList<Class>();
 
-	public Reader() {}
+	public JarReader() {}
 
 	/**
 	 * Retrieves the jar from the specified jar

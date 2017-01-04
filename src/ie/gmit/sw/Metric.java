@@ -11,7 +11,7 @@ public class Metric {
 
 	private int inDegree;
 	private int outDegree;
-	
+
 	public int getInDegree() {
 		return inDegree;
 	}
@@ -25,7 +25,8 @@ public class Metric {
 		this.outDegree = outDegree;
 	}
 
-	//public float getStability(){
-
-	//}	
+	public float getStability(){
+		float stability = 1f;
+		return stability;
+	}	
 }
