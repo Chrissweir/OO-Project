@@ -2,6 +2,11 @@ package ie.gmit.sw;
 
 import java.util.Map;
 
+/**
+ * 
+ * @author Christopher Weir - G00309429
+ *
+ */
 public class Metric {
 
 	private int inDegree;

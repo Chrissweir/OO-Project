@@ -2,9 +2,20 @@ package ie.gmit.sw;
 
 import java.lang.reflect.*;
 
+/**
+ * 
+ * @author Christopher Weir - G00309429
+ * This class is responsible for getting the details of the classes 
+ * from the jar file using Reflection
+ *
+ */
 public class Reflection {
 
 	private Class cls;
+
+	/**
+	 * @param cls
+	 */
 	public Reflection(Class cls){
 		super();
 		this.cls = cls;
@@ -22,7 +33,7 @@ public class Reflection {
 		//Loop over the methods and print its name and its return type
 		for(Method m : methods){
 
-			System.out.println("Method: " + m.getName());
+			System.out.println("Method Name: " + m.getName());
 			Class methodReturnType = m.getReturnType(); //Get a method return type
 			System.out.println("Method Return Type: " + methodReturnType.getName());
 
@@ -30,7 +41,7 @@ public class Reflection {
 			//Loop over the Method parameters and print the name of each
 			for(Class mp : methodParams){
 
-				System.out.println("Method Param: " + mp.getName());
+				System.out.println("Method Parameter: " + mp.getName());
 			}
 		}
 	}
@@ -39,7 +50,7 @@ public class Reflection {
 		//Loop over the Fields and print the name of each
 		for(Field f : fields){
 
-			System.out.println("Field: " + f.getName());
+			System.out.println("Field Name: " + f.getName());
 		}
 	}
 	private void getConstructor() {
@@ -49,17 +60,17 @@ public class Reflection {
 		//Loop over the constructors and print the name of each and its parameters
 		for(Constructor c : cons){
 
-			System.out.println("Contructor: " + c.getName());
+			System.out.println("Contructor Name: " + c.getName());
 			constructorParams = c.getParameterTypes(); //Get the parameters
 			for(Class param : constructorParams){
 
-				System.out.println("Constructor Param: " + param.getName());
+				System.out.println("Constructor Parameter: " + param.getName());
 			}
 		}
 	}
 	private void getInterface() {
 		boolean iface = cls.isInterface(); //Is it an interface?
-		System.out.println("Is Class an Interface?: " + iface);
+		System.out.println("Is this Class an Interface?: " + iface);
 
 		Class[] interfaces = cls.getInterfaces(); //Get the set of interface it implements
 		//Loop over the interfaces and print the name of each
