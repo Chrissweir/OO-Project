@@ -1,95 +1,75 @@
 package ie.gmit.sw;
 
 import java.lang.reflect.*;
-public class Reflection{
-   private Class c;
-   public static void main(String args[]){
-        if (args.length == 0) {
-            System.out.println("Please specify a class name.");
-            System.exit(1);
-        }
-        try {
-            Class queryClass = Class.forName(args[0]);
-            new Reflection(queryClass);
-        } catch (ClassNotFoundException ee) {
-            System.out.println("Couldn't find class '"+ args[0] + "'");
-            System.exit(1);
-        }
-   }
 
-   public Reflection(Class c){
-      super();
-      this.c = c;
+public class Reflection {
 
-      printConstructors();
-      printFields();
-      printMethods();
-      createArray();
-   }
+	private Class cls;
+	public Reflection(Class cls){
+		super();
+		this.cls = cls;
+		getPackage();
+		getInterface();
+		getConstructor();
+		getFields();
+		getMethods();
+	}
 
-   public void printConstructors(){
-      Constructor ctorlist[] = c.getDeclaredConstructors();
-      System.out.println("--------------" + ctorlist.length + " Constructors --------------");
-      for (int i = 0; i < ctorlist.length; i++) {
-         Constructor ct = ctorlist[i];
-         System.out.println("\tname  = " + ct.getName());
-         System.out.println("\tdecl class = " + ct.getDeclaringClass());
+	private void getMethods() {
+		Method[] methods = cls.getMethods(); //Get the set of methods
+		Class[] methodParams;
 
-         Class pvec[] = ct.getParameterTypes();
-         for (int j = 0; j < pvec.length; j++){
-            System.out.println("\tparam #" + j + " " + pvec[j]);
-         }
+		//Loop over the methods and print its name and its return type
+		for(Method m : methods){
 
-         Class evec[] = ct.getExceptionTypes();
-         for (int j = 0; j < evec.length; j++){
-            System.out.println("\texc #" + j + " " + evec[j]);
-         }
-         System.out.println("\t-----");
-      }
-   }
+			System.out.println("Method: " + m.getName());
+			Class methodReturnType = m.getReturnType(); //Get a method return type
+			System.out.println("Method Return Type: " + methodReturnType.getName());
 
-   public void printFields(){
-      Field fieldlist[] = c.getDeclaredFields();
-      for (int i = 0; i < fieldlist.length; i++) {
-         Field fld = fieldlist[i];
-         System.out.println("\tname = " + fld.getName());
-         System.out.println("\tdecl class = " + fld.getDeclaringClass());
-         System.out.println("\ttype = " + fld.getType());
-         int mod = fld.getModifiers();
-         System.out.println("\tmodifiers = " + Modifier.toString(mod));
-         System.out.println("-----");
-      }
-   }
+			methodParams = m.getParameterTypes(); //Get method parameters
+			//Loop over the Method parameters and print the name of each
+			for(Class mp : methodParams){
 
-   public void printMethods(){
-      Method methlist[] = c.getDeclaredMethods();
-      System.out.println("--------------" + methlist.length + " Methods --------------");
-      for (int i = 0; i < methlist.length;i++) {
-      	Method m = methlist[i];
-      	System.out.println("\tname = " + m.getName());
-      	System.out.println("\tdecl class = " + m.getDeclaringClass());
-      	Class pvec[] = m.getParameterTypes();
-      	for (int j = 0; j < pvec.length; j++){
-         		System.out.println("\tparam #" + j + " " + pvec[j]);
-    	}
-      	Class evec[] = m.getExceptionTypes();
-      	for (int j = 0; j < evec.length; j++){
-         		System.out.println("\texc #" + j + " " + evec[j]);
-      	}
-      	System.out.println("\treturn type = " + m.getReturnType());
-      	System.out.println("\t-----");
-      }
-   }
+				System.out.println("Method Param: " + mp.getName());
+			}
+		}
+	}
+	private void getFields() {
+		Field[] fields = cls.getFields(); //Get the fields / attributes
+		//Loop over the Fields and print the name of each
+		for(Field f : fields){
 
-   public void createArray(){
-      try {
-         Class cls = Class.forName("java.lang.String");
-         Object arr = Array.newInstance(cls, 10);
-         Array.set(arr, 5, "Msc OO");
-         String s = (String)Array.get(arr, 5);
-         System.out.println(s);
-      }catch (Throwable e) {
-         System.err.println(e);
-      }
-   }
+			System.out.println("Field: " + f.getName());
+		}
+	}
+	private void getConstructor() {
+		Constructor[] cons = cls.getConstructors(); //Get the set of constructors
+		Class[] constructorParams;
+
+		//Loop over the constructors and print the name of each and its parameters
+		for(Constructor c : cons){
+
+			System.out.println("Contructor: " + c.getName());
+			constructorParams = c.getParameterTypes(); //Get the parameters
+			for(Class param : constructorParams){
+
+				System.out.println("Constructor Param: " + param.getName());
+			}
+		}
+	}
+	private void getInterface() {
+		boolean iface = cls.isInterface(); //Is it an interface?
+		System.out.println("Is Class an Interface?: " + iface);
+
+		Class[] interfaces = cls.getInterfaces(); //Get the set of interface it implements
+		//Loop over the interfaces and print the name of each
+		for(Class i : interfaces){
+
+			System.out.println("Implements Interface: " + i.getName());
+		}
+	}
+	private void getPackage() {
+		Package pack = cls.getPackage(); //Get the package
+		System.out.println("Package Name: " + pack.getName());
+	}
 }
