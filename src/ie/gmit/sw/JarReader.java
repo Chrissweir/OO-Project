@@ -20,8 +20,7 @@ import java.util.jar.JarInputStream;
 
 public class JarReader {
 
-	List<Class> cls = new ArrayList<Class>();
-
+	List<Class> jarContent = new ArrayList<Class>();
 	public JarReader() {}
 
 	/**
@@ -45,23 +44,22 @@ public class JarReader {
 				String name = next.getName().replaceAll("/", "\\.");
 				name = name.replaceAll(".class", "");
 				if (!name.contains("$")) name.substring(0, name.length() - ".class".length());
-				System.out.println(name);
-
-				Class queryClass;
+				//System.out.println(name);
+				
+				Class cls;
 				try {
-					queryClass = Class.forName(name, false, cl);
-					cls.add(queryClass);
-					new Reflection(queryClass);
+					cls = Class.forName(name, false, cl);
+					jarContent.add(cls);
 					//System.exit(0);
 				} 
 				catch (ClassNotFoundException e) {
 					System.out.println("Couldn't find class '" + name + "'");
 					System.exit(0);
-				} 
-				 System.out.println(cls.size());
+				}
 			}
 			next = in.getNextJarEntry();
 		}
+		new MetricCalculator(jarContent, jarFile);
 		in.close();
 	}
 }
