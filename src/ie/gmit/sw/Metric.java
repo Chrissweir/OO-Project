@@ -27,6 +27,11 @@ public class Metric {
 
 	public float getStability(){
 		float stability = 1f;
+		
+		if(outDegree <= 0)
+		{
+			stability = ((float)outDegree / (float)inDegree + (float)outDegree);
+		}
 		return stability;
 	}	
 }
