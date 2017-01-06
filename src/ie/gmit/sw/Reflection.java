@@ -9,7 +9,7 @@ import java.lang.reflect.*;
  * from the jar file using Reflection
  *
  */
-public class Reflection {
+public class Reflection implements testInterface{
 
 	private Class cls;
 
