@@ -41,33 +41,27 @@ public class MetricCalculator implements testInterface{
 			File file  = new File(jar);
 			URL url = file.toURI().toURL();
 			URL[] urls = new URL[]{url};
-			// create a ClassLoader to load classes from the JAR file
+
 			ClassLoader cl = new URLClassLoader(urls);
 
-			// loop for each key in the graph map
 			for (String className : graph.keySet()) {
 
-				// get handle on class, using the class loader, not intialising the class
 				Class cls = Class.forName(className, false, cl);
-				// analyse class to calculate in and out degree
 				reflection(cls);
 
-			} // foreach
+			}
 		} catch (Exception e){
 
 			e.printStackTrace();
 		}
 
-	} // calculateMetric()
+	}
 
 	public void reflection(Class cls){
 
 		int outdegree = 0;
 
 		boolean iface = cls.isInterface();
-		if(iface ==true){
-			
-		}
 
 		Class[] interfaces = cls.getInterfaces();
 		for(Class i : interfaces){
@@ -79,10 +73,66 @@ public class MetricCalculator implements testInterface{
 			}
 		}
 
-		System.out.println("outdegree: " + outdegree + "| Class: " + cls.getName());
-		graph.get(cls.getName()).setOutDegree(outdegree);
-		System.out.println(graph.get(cls.getName()).getInDegree());
+		Constructor[] cons = cls.getConstructors(); //Get the set of constructors
+		Class[] constructorParams;
 
-		System.out.println(graph.get(cls.getName()).getStability());
+		for(Constructor c : cons){
+
+			constructorParams = c.getParameterTypes();
+			for(Class param : constructorParams){
+
+				if(graph.containsKey(param.getName())){
+
+					outdegree++;
+
+					Metric m = graph.get(param.getName());
+					m.setInDegree(m.getInDegree() + 1);
+				}
+			}
+		}
+
+		Field[] fields = cls.getDeclaredFields();
+
+		for(Field f : fields)
+		{
+			Type type = f.getType();
+			//System.out.println(type.getTypeName());
+			if(graph.containsKey(type.getTypeName()))
+			{
+				outdegree++;
+				Metric m = graph.get(type.getTypeName());
+				m.setInDegree(m.getInDegree() + 1);
+			}
+		}
+
+		Method[] methods = cls.getDeclaredMethods(); //Get the set of methods
+		Class[] methodParams;
+
+		for(Method m : methods){
+
+			Class methodReturnType = m.getReturnType();
+			//System.out.println(methodReturnType.getName());
+			if(graph.containsKey(methodReturnType.getName())){
+				outdegree++;
+				Metric mc = graph.get(methodReturnType.getName());
+				mc.setInDegree(mc.getInDegree() + 1);
+			}
+
+			methodParams = m.getParameterTypes(); //Get method parameters
+			for(Class mp : methodParams){
+				//System.out.println(mp.getName());
+				if(graph.containsKey(mp.getName())){
+					outdegree++;
+					Metric bm = graph.get(mp.getName());
+					bm.setInDegree(bm.getInDegree() + 1);
+				}
+			} 
+		}
+		System.out.println();
+		System.out.println("Class: " + cls.getName());
+		graph.get(cls.getName()).setOutDegree(outdegree);
+		System.out.println("Indegree: " + graph.get(cls.getName()).getInDegree());		
+		System.out.println("Outdegree: " + graph.get(cls.getName()).getOutDegree());		
+		System.out.println("Stability: " + graph.get(cls.getName()).getStability());
 	}
 }

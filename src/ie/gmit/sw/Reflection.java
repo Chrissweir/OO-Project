@@ -12,11 +12,12 @@ import java.lang.reflect.*;
 public class Reflection implements testInterface{
 
 	private Class cls;
+	public String test = "test";
 
 	/**
 	 * @param cls
 	 */
-	public Reflection(Class cls){
+	public Reflection(){
 		super();
 		this.cls = cls;
 		getPackage();
@@ -82,5 +83,9 @@ public class Reflection implements testInterface{
 	private void getPackage() {
 		Package pack = cls.getPackage(); //Get the package
 		System.out.println("Package Name: " + pack.getName());
+	}
+	
+	public void testt(){
+		System.out.println("test");
 	}
 }

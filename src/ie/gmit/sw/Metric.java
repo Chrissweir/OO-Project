@@ -34,13 +34,16 @@ public class Metric {
 		this.outDegree = outDegree;
 	}
 
-	public float getStability(){
+	public double getStability(){
 		float stability = 1f;
 		
-		if(outDegree <= 0)
+		if(getOutDegree() > 0)
 		{
-			stability = ((float)getOutDegree() / (float)getInDegree() + (float)getOutDegree());
+			stability = ((float)getOutDegree() /( (float)getInDegree() + (float)getOutDegree()));
 		}
-		return stability;
+		else{
+			stability = 0f;
+		}
+		return Math.round(stability * 10d) / 10d;
 	}	
 }
