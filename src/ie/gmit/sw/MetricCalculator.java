@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MetricCalculator implements testInterface{
+public class MetricCalculator{
 
 	private Map<String, Metric> graph = new HashMap();
 	private List<Class> jarClasses;
