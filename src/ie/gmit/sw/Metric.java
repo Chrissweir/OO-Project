@@ -44,6 +44,7 @@ public class Metric {
 		else{
 			stability = 0f;
 		}
-		return Math.round(stability * 10d) / 10d;
+		return Math.round(stability * 100d) / 100d;
+		//return stability;
 	}	
 }
