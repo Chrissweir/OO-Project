@@ -27,4 +27,4 @@ To launch this application you will need to download the zipped project from her
 
 UML Diagram
 -------------
-![UML Diagram]()
+![UML Diagram](https://github.com/Chrissweir/OO-Project/blob/master/src/ie/gmit/sw/Design.png)
