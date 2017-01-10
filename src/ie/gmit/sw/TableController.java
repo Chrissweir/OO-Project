@@ -1,7 +1,6 @@
 package ie.gmit.sw;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -9,23 +8,26 @@ public class TableController extends JTable{
 	private static final long serialVersionUID = 777L;	
 	private TypeSummaryTableModel tm = null;
 	private JTable table = null;
-	private JScrollPane tableScroller = null;
-	private JButton btnClose = null;
-	private JPanel tablePanel = new JPanel();
+	private JScrollPane tableScroller;
 	
 	public TableController(){
 		createTable();
 	}
 	
 	/**
-     * Method to get the table model from the table in the dialog window
+     * Method to get the table model from the table 
      *
      * @return
-     * The TypeSummaryTableModel, which is the model for the table in the dialog window
+     * The TypeSummaryTableModel, which is the model for the table
      */
 	public TypeSummaryTableModel getTableModel(){
 	    return tm;
     } 
+	
+	
+	/**
+	 *  Method for creating the table.
+	 */
 	private void createTable(){
 		tm = new TypeSummaryTableModel();
 		table = new JTable(tm);
@@ -47,5 +49,8 @@ public class TableController extends JTable{
 				column.setMinWidth(100);
 			}
 		}
+		tableScroller = new JScrollPane(table);
+		tableScroller.setPreferredSize(new java.awt.Dimension(485, 235));
+		tableScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 	}
 }

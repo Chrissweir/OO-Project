@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -25,17 +26,14 @@ public class AppWindow {
 	private JFrame frame;
 	private String name;
 	private JTextField txtFileName;
-	private Controller cc;
 	private TableController tc;
 	private JTable table = new JTable();
-
-
 
 	public AppWindow(){
 		//Create a window for the application
 		frame = new JFrame();
 		frame.setTitle("B.Sc. in Software Development - GMIT");
-		frame.setSize(550, 500);
+		frame.setSize(550, 550);
 		frame.setResizable(false);
 		frame.getContentPane().setLayout(new FlowLayout());
 
@@ -101,23 +99,18 @@ public class AppWindow {
 			}
 		});
 
-
 		//A separate panel for the programme output
-		JPanel mid = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		mid.setBorder(new BevelBorder(BevelBorder.RAISED));
-		mid.setPreferredSize(new java.awt.Dimension(500, 300));
-		mid.setMaximumSize(new java.awt.Dimension(500, 300));
-		mid.setMinimumSize(new java.awt.Dimension(500, 300));
 
 		JPanel middle = new JPanel();
 		middle.add(table);
-		table.setPreferredSize(new Dimension(500, 250));
-		table.setMaximumSize(new Dimension(500, 250));
-		table.setMinimumSize(new Dimension(500, 250));
+		middle.setVisible(false);
+		table.setPreferredSize(new Dimension(540, 300));
+		table.setMaximumSize(new Dimension(540, 300));
+		table.setMinimumSize(new Dimension(540, 300));
 		frame.getContentPane().add(middle);
-		middle.setPreferredSize(new Dimension(500, 250));
-		middle.setMaximumSize(new Dimension(500, 250));
-		middle.setMinimumSize(new Dimension(500, 250));
+		middle.setPreferredSize(new Dimension(550, 300));
+		middle.setMaximumSize(new Dimension(550, 300));
+		middle.setMinimumSize(new Dimension(550, 300));
 
 		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		bottom.setPreferredSize(new java.awt.Dimension(500, 50));
@@ -127,33 +120,27 @@ public class AppWindow {
 
 		btnCalculate.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				btnCalculate.addActionListener(new ActionListener() {
 
+				// check if their is something entered in the filepath
+				if(txtFileName.getText().length() > 1){
+					try {
+						MetricCalculator m = new MetricCalculator(name);
+						tc = new TableController();
+						// get handle on summary table model
+						TypeSummaryTableModel tm = tc.getTableModel();
 
-					public void actionPerformed(ActionEvent evt) {
-
-						// check if their is something entered in the filepath
-						if(txtFileName.getText().length() > 1){
-							try {
-								MetricCalculator m = new MetricCalculator(name);
-								tc = new TableController();
-								// get handle on summary table model
-								TypeSummaryTableModel tm = tc.getTableModel();
-
-								// add metric data into table model
-								tm.setTableData(m.getData());
-								table.setModel(tm);
-
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-						else {
-
-							System.out.println("No jar selected");
-						} 
+						// add metric data into table model
+						tm.setTableData(m.getData());
+						table.setModel(tm);
+						middle.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				});
+				}
+				else {
+
+					System.out.println("No jar selected");
+				} 
 			}
 		});
 
@@ -163,10 +150,8 @@ public class AppWindow {
 				System.exit(0);
 			}
 		});
-		
-		
-		
-		
+
+
 		bottom.add(btnCalculate);
 		bottom.add(btnQuit);
 
