@@ -26,6 +26,7 @@ public class AppWindow {
 	private TableController tc;
 	private JTable table = new JTable();
 	private JScrollPane tableScroller = new JScrollPane();
+	private MetricCalculator m;
 
 	public AppWindow(){
 		//Create a window for the application
@@ -47,7 +48,7 @@ public class AppWindow {
 		fileNamePanel.setPreferredSize(new Dimension(500, 60));
 		fileNamePanel.setMaximumSize(new Dimension(500, 60));
 		fileNamePanel.setMinimumSize(new Dimension(500, 60));
-		
+
 		JLabel label = new JLabel("Selected JAR file path:");
 		label.setPreferredSize(new Dimension(490, 20));
 		label.setMinimumSize(new Dimension(100, 20));
@@ -96,12 +97,12 @@ public class AppWindow {
 		//A separate panel for the programme output
 
 		JPanel middle = new JPanel();
-		
+
 		middle.setVisible(false);
 		middle.setPreferredSize(new Dimension(550, 240));
 		middle.setMaximumSize(new Dimension(550, 240));
 		middle.setMinimumSize(new Dimension(550, 240));
-		
+
 
 		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		bottom.setPreferredSize(new java.awt.Dimension(500, 50));
@@ -115,7 +116,7 @@ public class AppWindow {
 				// check if their is something entered in the filepath
 				if(txtFileName.getText().length() > 1){
 					try {
-						MetricCalculator m = new MetricCalculator(name);
+						m = new MetricCalculator(name);
 						tc = new TableController();
 						// get handle on summary table model
 						TypeSummaryTableModel tm = tc.getTableModel();
@@ -128,7 +129,7 @@ public class AppWindow {
 						table.setSelectionBackground(Color.YELLOW);
 
 						table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-						
+
 						TableColumn column = null;
 						for (int i = 0; i < table.getColumnCount(); i++){
 							column = table.getColumnModel().getColumn(i);
@@ -142,7 +143,7 @@ public class AppWindow {
 								column.setMinWidth(90);
 							}
 						}
-						
+
 						middle.setVisible(true);
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -164,14 +165,14 @@ public class AppWindow {
 		top.add(label);
 		top.add(txtFileName);
 		top.add(buttonPanel);
-		
+
 		middle.add(tableScroller = new JScrollPane(table));
 		tableScroller.setPreferredSize(new java.awt.Dimension(530, 300));
 		tableScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
+
 		bottom.add(btnCalculate);
 		bottom.add(btnQuit);
-		
+
 		frame.getContentPane().add(top);
 		frame.getContentPane().add(middle);
 		frame.getContentPane().add(bottom);
