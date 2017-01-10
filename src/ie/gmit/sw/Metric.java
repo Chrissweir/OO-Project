@@ -91,6 +91,6 @@ public class Metric {
 		else{
 			stability = 0f;
 		}
-		return stability;
+		return (float) (Math.round(stability * 100d)/100d);
 	}	
 }

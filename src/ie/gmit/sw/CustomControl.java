@@ -1,43 +1,40 @@
 package ie.gmit.sw;
 
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
-import javax.swing.table.*;
-
-/**
- * A Dialog popup with a table to display the results of
- * the stability calculation
- */
-public class AppSummary extends JDialog {
-
-	private static final long serialVersionUID = 777L;	
+import javax.swing.table.TableColumn;
+public class CustomControl extends JComponent{
+	private static final long serialVersionUID = 777L;
 	private TypeSummaryTableModel tm = null;
 	private JTable table = null;
 	private JScrollPane tableScroller = null;
-	private JButton btnClose = null;
 	private JPanel tablePanel = new JPanel();
-	private JPanel buttonPanel = new JPanel();
 	private Container c;
 	
-	public AppSummary(JFrame parent, boolean modal){
 
-        super(parent, modal);
-        super.setTitle("Summary");
-        super.setResizable(true);
-        
-        this.setSize(new Dimension(600, 500));
-        
-		c = getContentPane();
-		c.setLayout(new FlowLayout());
-
+	public CustomControl(Dimension size) {
+		super();
+		setSize(size.width, size.height);
+		enableInputMethods(true);   
+		setFocusable(true);
 		createTable();
-        configureButton();
-        
-        c.add(tablePanel);
-        c.add(buttonPanel);
 	}
 
+	public Dimension getPreferredSize() {
+		return new Dimension(getWidth(), getHeight());
+	}
+
+	public Dimension getMaximumSize() {
+		return getPreferredSize();
+	}
+
+	public Dimension getMinimumSize() {
+		return getPreferredSize();
+	}
+	
 
     /**
      * Method to get the table model from the table in the dialog window
@@ -83,31 +80,5 @@ public class AppSummary extends JDialog {
 
 		tablePanel.add(tableScroller, FlowLayout.LEFT);
 
-	} // createTable()
-
-    /**
-     * Configures the button on the dialog window
-     */
-	private void configureButton(){
-
-    	buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-		//Configure the Cancel button
-		btnClose = new JButton("Close");		
-		btnClose.setToolTipText("Close this Window");
-		btnClose.setPreferredSize(new Dimension(100, 40));
-		btnClose.setMaximumSize(new Dimension(100, 40));
-		btnClose.setMargin(new Insets(2, 2, 2, 2));
-		btnClose.setMinimumSize(new Dimension(100, 40));
-		btnClose.setIcon(new ImageIcon("images/close.gif"));
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				dispose();
-			}
-		});
-
-		buttonPanel.add(btnClose);
-
-	} // configureButton()
-
-} // class
+	}
+}

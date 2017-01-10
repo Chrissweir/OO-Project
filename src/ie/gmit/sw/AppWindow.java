@@ -14,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -23,7 +25,10 @@ public class AppWindow {
 	private JFrame frame;
 	private String name;
 	private JTextField txtFileName;
-	private AppSummary as;
+	private Controller cc;
+	private TableController tc;
+	private JTable table = new JTable();
+
 
 
 	public AppWindow(){
@@ -70,7 +75,7 @@ public class AppWindow {
 		buttonPanel.setPreferredSize(new Dimension(500, 40));
 		buttonPanel.setMaximumSize(new Dimension(500, 40));
 		buttonPanel.setMinimumSize(new Dimension(500, 40));
-		
+
 		JButton btnCalculate = new JButton("Calculate Stability"); //Create Quit button
 		btnCalculate.setEnabled(false);
 
@@ -104,17 +109,26 @@ public class AppWindow {
 		mid.setMaximumSize(new java.awt.Dimension(500, 300));
 		mid.setMinimumSize(new java.awt.Dimension(500, 300));
 
-
+		JPanel middle = new JPanel();
+		middle.add(table);
+		table.setPreferredSize(new Dimension(500, 250));
+		table.setMaximumSize(new Dimension(500, 250));
+		table.setMinimumSize(new Dimension(500, 250));
+		frame.getContentPane().add(middle);
+		middle.setPreferredSize(new Dimension(500, 250));
+		middle.setMaximumSize(new Dimension(500, 250));
+		middle.setMinimumSize(new Dimension(500, 250));
 
 		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		bottom.setPreferredSize(new java.awt.Dimension(500, 50));
 		bottom.setMaximumSize(new java.awt.Dimension(500, 50));
 		bottom.setMinimumSize(new java.awt.Dimension(500, 50));
 
-		
+
 		btnCalculate.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				btnCalculate.addActionListener(new ActionListener() {
+
 
 					public void actionPerformed(ActionEvent evt) {
 
@@ -122,23 +136,19 @@ public class AppWindow {
 						if(txtFileName.getText().length() > 1){
 							try {
 								MetricCalculator m = new MetricCalculator(name);
-								
-								// create the summary
-		                        as = new AppSummary(frame, true);
+								tc = new TableController();
+								// get handle on summary table model
+								TypeSummaryTableModel tm = tc.getTableModel();
 
-		                        // get handle on summary table model
-		                        TypeSummaryTableModel tm = as.getTableModel();
+								// add metric data into table model
+								tm.setTableData(m.getData());
+								table.setModel(tm);
 
-		                        // add metric data into table model
-		                        tm.setTableData(m.getData());
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-						
-						 // make the dialog visible
-	                    as.setVisible(true);
 						}
-	                    else {
+						else {
 
 							System.out.println("No jar selected");
 						} 
@@ -147,20 +157,24 @@ public class AppWindow {
 			}
 		});
 
-			JButton btnQuit = new JButton("Quit"); //Create Quit button
-			btnQuit.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(ActionEvent evt) {
-					System.exit(0);
-				}
-			});
-			bottom.add(btnCalculate);
-			bottom.add(btnQuit);
+		JButton btnQuit = new JButton("Quit"); //Create Quit button
+		btnQuit.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				System.exit(0);
+			}
+		});
+		
+		
+		
+		
+		bottom.add(btnCalculate);
+		bottom.add(btnQuit);
 
-			frame.getContentPane().add(bottom);       
-			frame.setVisible(true);
-		}
-
-		public static void main(String[] args) {
-			new AppWindow();
-		}
+		frame.getContentPane().add(bottom);
+		frame.setVisible(true);
 	}
+
+	public static void main(String[] args) {
+		new AppWindow();
+	}
+}

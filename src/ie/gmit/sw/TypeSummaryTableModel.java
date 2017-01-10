@@ -9,7 +9,7 @@ import javax.swing.table.*;
  */
 public class TypeSummaryTableModel extends AbstractTableModel{
 	private static final long serialVersionUID = 777L;
-	private String[] cols = {"Class", "Stability", "Out Degree", "In Degree"};
+	private String[] cols = {"Class", "InDegree", "OutDegree", "Stability"};
 	private Object[][] data = {
 		{"Stuff 1", "Other Stuff 1", "Even More Stuff 1", "Extra Stuff 1"}
 	};
