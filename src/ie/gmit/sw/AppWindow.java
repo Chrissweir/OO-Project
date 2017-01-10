@@ -2,10 +2,8 @@ package ie.gmit.sw;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -15,18 +13,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.BevelBorder;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
-import java.awt.ScrollPane;
 
 public class AppWindow {
 	private JFrame frame;
@@ -106,7 +98,6 @@ public class AppWindow {
 		JPanel middle = new JPanel();
 		
 		middle.setVisible(false);
-		
 		middle.setPreferredSize(new Dimension(550, 240));
 		middle.setMaximumSize(new Dimension(550, 240));
 		middle.setMinimumSize(new Dimension(550, 240));
@@ -119,9 +110,6 @@ public class AppWindow {
 
 
 		btnCalculate.addActionListener(new java.awt.event.ActionListener() {
-
-			
-
 			public void actionPerformed(ActionEvent evt) {
 
 				// check if their is something entered in the filepath
@@ -136,6 +124,24 @@ public class AppWindow {
 						tm.setTableData(m.getData());
 						//table.setColumnModel(tc.getColumnModel());
 						table.setModel(tm);
+						table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+						table.setSelectionBackground(Color.YELLOW);
+
+						table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+						
+						TableColumn column = null;
+						for (int i = 0; i < table.getColumnCount(); i++){
+							column = table.getColumnModel().getColumn(i);
+							if (i == 0){
+								column.setPreferredWidth(250);
+								column.setMaxWidth(250);
+								column.setMinWidth(250);
+							}else{
+								column.setPreferredWidth(90);
+								column.setMaxWidth(90);
+								column.setMinWidth(90);
+							}
+						}
 						
 						middle.setVisible(true);
 					} catch (IOException e) {
@@ -160,25 +166,9 @@ public class AppWindow {
 		top.add(buttonPanel);
 		
 		middle.add(tableScroller = new JScrollPane(table));
-		table.setSelectionBackground(Color.RED);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		
-		for (int i = 0; i < table.getColumnCount(); i++){
-			TableColumn column = table.getColumnModel().getColumn(i);
-			if (i == 0){
-				column.setPreferredWidth(60);
-				column.setMaxWidth(60);
-				column.setMinWidth(60);
-			}else{
-				column.setPreferredWidth(100);
-				column.setMaxWidth(100);
-				column.setMinWidth(100);
-			}
-		}
 		tableScroller.setPreferredSize(new java.awt.Dimension(530, 300));
 		tableScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
+		
 		bottom.add(btnCalculate);
 		bottom.add(btnQuit);
 		
