@@ -1,6 +1,8 @@
 package ie.gmit.sw;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -10,61 +12,122 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * @author Christopher Weir - G00309429	
+ *
+ *	This Class is responsible for calculating the stability
+ */
+/**
+ * @author Chris
+ *
+ */
 public class MetricCalculator{
 
 	private Map<String, Metric> graph = new HashMap();
 	private List<Class> jarClasses;
 	private String jar;
+	private JarReader j = new JarReader();
 
-	public MetricCalculator(List<Class> jarContent, String jarFile){
-		this.jarClasses = jarContent;
+	/**
+	 * 
+     * Constructor
+     *
+     * @param jarFile
+     * jarFile is a String that represents the JAR file path
+     *
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public MetricCalculator(String jarFile) throws FileNotFoundException, IOException{
 		this.jar = jarFile;
+		this.jarClasses = j.readJarFile(jar);
 		addClassToMap();
 		calculateMetric();
-
 	}
 
-	public void addClassToMap(){
-		System.out.println("Add to class started");
+	/**
+     * @return
+     * Returns the metrics in the format of a 2 dimensional array to be used in
+     * the GUI Table.
+     * 
+     */
+	public Object[][] getData(){
+
+		int i = 0;
+		Object[][] data = new Object[graph.size()][4];
+
+		// For each metric object in the map
+		for(Metric m : graph.values()){
+			// Add the data to the array
+			data[i][0] = m.getClassName();  // set class name
+			data[i][1] = m.getStability();  // set stability
+			data[i][2] = m.getOutDegree();  // set outDegree
+			data[i][3] = m.getInDegree();   // set inDegree
+
+			i++;
+		}
+
+		return data;
+	}
+
+	/**
+	 * Adds the class names to the map with the metrics
+	 */
+	private void addClassToMap(){
+
+		System.out.println("Adding the Classes to the Map!\n");
+		System.out.println("The following classes are being added:");
 		for(int i = 0; i < jarClasses.size(); i++)
 		{
 			graph.put(jarClasses.get(i).getName(), new Metric());
 			graph.get(jarClasses.get(i).getName()).setClassName(jarClasses.get(i).getName());
 			System.out.println(jarClasses.get(i).getName());
 		}
+		System.out.println("The Map now contains " + graph.size() + " classes:");
 		System.out.println(graph.keySet());
-		System.out.println("map size: " + graph.size());
 	}
 
-	public void calculateMetric(){
+	/**
+	 * Loads each Class from the Jar File and Starts the calculations
+	 * to get the in and out degree of each class using Java Reflection
+	 */
+	private void calculateMetric(){
 
 		try {
-			File file  = new File(jar);
+			// Get the jar file
+			File file = new File(jar);
 			URL url = file.toURI().toURL();
 			URL[] urls = new URL[]{url};
 
+			// Use a ClassLoader to load the classes from the jar file
 			ClassLoader cl = new URLClassLoader(urls);
 
+			// For every key in the graph map
 			for (String className : graph.keySet()) {
-
+				// Load the Class
 				Class cls = Class.forName(className, false, cl);
-				reflection(cls);
 
+				// Use Java Reflection to calculate the in and out degree
+				reflection(cls);
 			}
 		} catch (Exception e){
-
 			e.printStackTrace();
 		}
-
 	}
 
+	/**
+	 * Uses Java Reflection to calculate the in and out degree of 
+	 * each class
+	 *
+	 * @param cls
+	 * The class being calculated.
+	 */
 	public void reflection(Class cls){
+		// A list to track each referenced class to avoid duplicates
 		List<String> classList = new ArrayList<String>();
 		int outdegree = 0;
 
-		boolean iface = cls.isInterface();
-
-		Class[] interfaces = cls.getInterfaces();
+		Class[] interfaces = cls.getInterfaces(); // Get the set of Interfaces
 		for(Class i : interfaces){
 			//System.out.println(i.getName());
 			if(graph.containsKey(i.getName())) {
@@ -78,11 +141,9 @@ public class MetricCalculator{
 			}
 		}
 
-		Constructor[] cons = cls.getConstructors(); //Get the set of constructors
+		Constructor[] cons = cls.getConstructors(); //Get the set of Constructors
 		Class[] constructorParams;
-
 		for(Constructor c : cons){
-
 			constructorParams = c.getParameterTypes();
 			for(Class param : constructorParams){
 				//System.out.println(param.getName());
@@ -99,10 +160,8 @@ public class MetricCalculator{
 			}
 		}
 
-		Field[] fields = cls.getDeclaredFields();
-
-		for(Field f : fields)
-		{
+		Field[] fields = cls.getDeclaredFields(); // Get the set of Fields
+		for(Field f : fields){
 			Type type = f.getType();
 			//System.out.println(type.getTypeName());
 			if(graph.containsKey(type.getTypeName())){
@@ -116,11 +175,10 @@ public class MetricCalculator{
 			}
 		}
 
-		Method[] methods = cls.getDeclaredMethods(); //Get the set of methods
+		Method[] methods = cls.getDeclaredMethods(); //Get the set of Methods
 		Class[] methodParams;
 
 		for(Method m : methods){
-
 			Class methodReturnType = m.getReturnType();
 			//System.out.println(methodReturnType.getName());
 			if(graph.containsKey(methodReturnType.getName())){
@@ -149,6 +207,7 @@ public class MetricCalculator{
 		}
 		System.out.println();
 		System.out.println("Class: " + cls.getName());
+		// Set the total out degree of the Class
 		graph.get(cls.getName()).setOutDegree(outdegree);
 		System.out.println("Indegree: " + graph.get(cls.getName()).getInDegree());		
 		System.out.println("Outdegree: " + graph.get(cls.getName()).getOutDegree());		

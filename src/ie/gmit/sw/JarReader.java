@@ -19,16 +19,17 @@ import java.util.jar.JarInputStream;
  */
 
 public class JarReader {
-
+	MetricCalculator m;
 	List<Class> jarContent = new ArrayList<Class>();
 	public JarReader() {}
 
 	/**
 	 * Retrieves the jar from the specified jar
+	 * @return 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void readJarFile(String jarFile) throws FileNotFoundException, IOException{
+	public List<Class> readJarFile(String jarFile) throws FileNotFoundException, IOException{
 
 		File file  = new File(jarFile);
         URL url = file.toURI().toURL();
@@ -44,13 +45,11 @@ public class JarReader {
 				String name = next.getName().replaceAll("/", "\\.");
 				name = name.replaceAll(".class", "");
 				if (!name.contains("$")) name.substring(0, name.length() - ".class".length());
-				//System.out.println(name);
 				
 				Class cls;
 				try {
 					cls = Class.forName(name, false, cl);
 					jarContent.add(cls);
-					//System.exit(0);
 				} 
 				catch (ClassNotFoundException e) {
 					System.out.println("Couldn't find class '" + name + "'");
@@ -59,7 +58,6 @@ public class JarReader {
 			}
 			next = in.getNextJarEntry();
 		}
-		new MetricCalculator(jarContent, jarFile);
-		in.close();
+		return jarContent;
 	}
 }
