@@ -24,7 +24,6 @@ public class TableController extends JTable{
 	    return tm;
     } 
 	
-	
 	/**
 	 *  Method for creating the table.
 	 */
@@ -32,10 +31,9 @@ public class TableController extends JTable{
 		tm = new TypeSummaryTableModel();
 		table = new JTable(tm);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.setSelectionBackground(Color.YELLOW);
+		table.setSelectionBackground(Color.BLUE);
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
 		TableColumn column = null;
 		for (int i = 0; i < table.getColumnCount(); i++){
 			column = table.getColumnModel().getColumn(i);
@@ -49,8 +47,6 @@ public class TableController extends JTable{
 				column.setMinWidth(100);
 			}
 		}
-		tableScroller = new JScrollPane(table);
-		tableScroller.setPreferredSize(new java.awt.Dimension(485, 235));
-		tableScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
 	}
 }

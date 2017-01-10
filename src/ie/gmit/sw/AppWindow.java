@@ -13,7 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,13 +26,14 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
+import java.awt.ScrollPane;
 
 public class AppWindow {
 	private JFrame frame;
 	private String name;
-	private JTextField txtFileName;
 	private TableController tc;
 	private JTable table = new JTable();
+	private JScrollPane tableScroller = new JScrollPane();
 
 	public AppWindow(){
 		//Create a window for the application
@@ -49,18 +55,15 @@ public class AppWindow {
 		fileNamePanel.setPreferredSize(new Dimension(500, 60));
 		fileNamePanel.setMaximumSize(new Dimension(500, 60));
 		fileNamePanel.setMinimumSize(new Dimension(500, 60));
-		frame.getContentPane().add(top); //Add the panel to the window
-
+		
 		JLabel label = new JLabel("Selected JAR file path:");
-		top.add(label);
 		label.setPreferredSize(new Dimension(490, 20));
 		label.setMinimumSize(new Dimension(100, 20));
 		label.setMaximumSize(new Dimension(400, 20));
 		label.setHorizontalTextPosition(SwingConstants.LEFT);
 
-		txtFileName = new JTextField(44);
+		JTextField txtFileName = new JTextField(44);
 		txtFileName.setEditable(false);
-		top.add(txtFileName);
 		txtFileName.setPreferredSize(new Dimension(400, 30));
 		txtFileName.setMinimumSize(new Dimension(400, 30));
 		txtFileName.setMaximumSize(new Dimension(400, 30));
@@ -69,7 +72,6 @@ public class AppWindow {
 		JPanel buttonPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) buttonPanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
-		top.add(buttonPanel);
 		buttonPanel.setPreferredSize(new Dimension(500, 40));
 		buttonPanel.setMaximumSize(new Dimension(500, 40));
 		buttonPanel.setMinimumSize(new Dimension(500, 40));
@@ -102,15 +104,13 @@ public class AppWindow {
 		//A separate panel for the programme output
 
 		JPanel middle = new JPanel();
-		middle.add(table);
+		
 		middle.setVisible(false);
-		table.setPreferredSize(new Dimension(540, 300));
-		table.setMaximumSize(new Dimension(540, 300));
-		table.setMinimumSize(new Dimension(540, 300));
-		frame.getContentPane().add(middle);
-		middle.setPreferredSize(new Dimension(550, 300));
-		middle.setMaximumSize(new Dimension(550, 300));
-		middle.setMinimumSize(new Dimension(550, 300));
+		
+		middle.setPreferredSize(new Dimension(550, 240));
+		middle.setMaximumSize(new Dimension(550, 240));
+		middle.setMinimumSize(new Dimension(550, 240));
+		
 
 		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		bottom.setPreferredSize(new java.awt.Dimension(500, 50));
@@ -119,6 +119,9 @@ public class AppWindow {
 
 
 		btnCalculate.addActionListener(new java.awt.event.ActionListener() {
+
+			
+
 			public void actionPerformed(ActionEvent evt) {
 
 				// check if their is something entered in the filepath
@@ -131,7 +134,9 @@ public class AppWindow {
 
 						// add metric data into table model
 						tm.setTableData(m.getData());
+						//table.setColumnModel(tc.getColumnModel());
 						table.setModel(tm);
+						
 						middle.setVisible(true);
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -150,11 +155,35 @@ public class AppWindow {
 				System.exit(0);
 			}
 		});
-
+		top.add(label);
+		top.add(txtFileName);
+		top.add(buttonPanel);
+		
+		middle.add(tableScroller = new JScrollPane(table));
+		table.setSelectionBackground(Color.RED);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		
+		for (int i = 0; i < table.getColumnCount(); i++){
+			TableColumn column = table.getColumnModel().getColumn(i);
+			if (i == 0){
+				column.setPreferredWidth(60);
+				column.setMaxWidth(60);
+				column.setMinWidth(60);
+			}else{
+				column.setPreferredWidth(100);
+				column.setMaxWidth(100);
+				column.setMinWidth(100);
+			}
+		}
+		tableScroller.setPreferredSize(new java.awt.Dimension(530, 300));
+		tableScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		bottom.add(btnCalculate);
 		bottom.add(btnQuit);
-
+		
+		frame.getContentPane().add(top);
+		frame.getContentPane().add(middle);
 		frame.getContentPane().add(bottom);
 		frame.setVisible(true);
 	}

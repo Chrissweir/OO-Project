@@ -25,6 +25,10 @@ public class TypeSummaryTableModel extends AbstractTableModel{
 		this.data = data;
 
 	}
+	
+	public String[] getColumns(){
+		return cols;
+	}
 
 	/**
 	 * Gets the number of columns in the table.
