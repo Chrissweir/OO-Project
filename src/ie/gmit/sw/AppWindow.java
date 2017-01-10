@@ -17,6 +17,7 @@ import javax.swing.table.TableColumn;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
 
@@ -114,7 +115,7 @@ public class AppWindow {
 			public void actionPerformed(ActionEvent evt) {
 
 				// check if their is something entered in the filepath
-				if(txtFileName.getText().length() > 1){
+				if(name.endsWith(".jar")){
 					try {
 						m = new MetricCalculator(name);
 						tc = new TableController();
@@ -126,7 +127,7 @@ public class AppWindow {
 						//table.setColumnModel(tc.getColumnModel());
 						table.setModel(tm);
 						table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-						table.setSelectionBackground(Color.YELLOW);
+						table.setSelectionBackground(Color.ORANGE);
 
 						table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -151,7 +152,8 @@ public class AppWindow {
 				}
 				else {
 
-					System.out.println("No jar selected");
+					System.out.println("JAR file not selected please try again");
+					JOptionPane.showMessageDialog(null, "JAR file not selected please try again");
 				} 
 			}
 		});
