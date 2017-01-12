@@ -21,6 +21,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
 
+/**
+ * @author Christopher Weir - G00309429
+ *
+ */
 public class AppWindow {
 	private JFrame frame;
 	private String name;

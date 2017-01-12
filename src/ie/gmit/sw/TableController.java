@@ -4,6 +4,10 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
+/**
+ * @author Christopher Weir - G00309429
+ *
+ */
 public class TableController extends JTable{
 	private static final long serialVersionUID = 777L;	
 	private TypeSummaryTableModel tm = null;
